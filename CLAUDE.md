@@ -97,6 +97,48 @@ let offset = (firstWeekday - calendar.firstWeekday + 7) % 7
 
 ---
 
+## Workflow Git
+
+Chaque nouvelle feature doit être développée sur sa propre branche, puis mergée dans `main` via une Pull Request.
+
+### Conventions de nommage des branches
+
+```
+feature/<nom-court>     # nouvelle fonctionnalité
+fix/<nom-court>         # correction de bug
+refactor/<nom-court>    # refactoring sans changement fonctionnel
+```
+
+Exemples : `feature/journey-system`, `fix/calendar-alignment`, `refactor/healthkit-service`
+
+### Workflow standard
+
+```bash
+# 1. Créer la branche depuis main à jour
+git checkout main && git pull origin main
+git checkout -b feature/<nom>
+
+# 2. Développer, committer au fil de l'eau
+git add <fichiers>
+git commit -m "message"
+
+# 3. Pousser et ouvrir la PR
+git push -u origin feature/<nom>
+gh pr create --title "..." --body "..."
+
+# 4. Après merge, nettoyer
+git checkout main && git pull origin main
+git branch -d feature/<nom>
+```
+
+### Règles
+
+- Ne jamais committer directement sur `main`
+- Un dossier feature (`Ring/`, `Settings/`, `Journey/`, …) = une branche dédiée lors de sa création
+- Chaque PR doit avoir un titre clair et un body décrivant ce qui change et pourquoi
+
+---
+
 ## Roadmap / Features à venir
 
 - [x] Objectif personnalisable (picker 5 000–20 000 dans les paramètres, persisté UserDefaults)
