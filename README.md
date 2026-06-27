@@ -2,7 +2,6 @@
 
 Application iOS de suivi de pas quotidiens, développée en Swift/SwiftUI pur, sans dépendances tierces.
 
-> Projet "build in public" — développement incrémental documenté sur LinkedIn.
 
 ---
 
