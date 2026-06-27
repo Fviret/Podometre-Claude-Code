@@ -9,7 +9,7 @@ struct JourneyPickerView: View {
     @State private var journeyToPreview: Journey?
 
     /// Ordre d'affichage des catégories.
-    private let categoryOrder: [JourneyCategory] = [.trail, .history, .myth]
+    private let categoryOrder: [JourneyCategory] = [.walk, .trail, .history, .myth]
 
     /// Trajets groupés par catégorie.
     private var grouped: [JourneyCategory: [Journey]] {

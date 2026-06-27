@@ -2,6 +2,12 @@ import Foundation
 
 /// Catalogue de tous les trajets disponibles, regroupables par catégorie.
 let allJourneys: [Journey] = [
+    // Promenades
+    journeyWalk2k5,
+    journeyWalk5k,
+    journeyWalk10k,
+    journeyWalk21k,
+    journeyWalk42k,
     // Sentiers
     journeyGR20,
     journeyCaminoFinal,
@@ -20,6 +26,177 @@ let allJourneys: [Journey] = [
     journeyOdysseeComplet,
     journeyIliade,
 ]
+
+// MARK: - Promenades
+
+private let journeyWalk2k5 = Journey(
+    id: UUID(uuidString: "F6A7B8C9-0001-0001-0001-000000000001")!,
+    name: "Tour des Tuileries",
+    subtitle: "Du Louvre à la Concorde — 2,5 km",
+    totalKm: 2.5,
+    category: .walk,
+    emoji: "🌿",
+    milestones: [
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0001-0001-0001-000000000011")!,
+            km: 0,
+            label: "Pyramide du Louvre",
+            description: "Départ face à la pyramide de verre. Les cours du palais s'ouvrent sur un des musées les plus visités au monde."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0001-0001-0001-000000000012")!,
+            km: 1.2,
+            label: "Bassin octogonal",
+            description: "Centre géométrique du jardin. Les chaises vertes, les enfants aux voiliers, le soleil sur l'eau — Paris au ralenti."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0001-0001-0001-000000000013")!,
+            km: 2.5,
+            label: "Place de la Concorde",
+            description: "L'obélisque de Louxor marque l'arrivée. La plus grande place de Paris s'ouvre sur les Champs-Élysées à l'ouest."
+        ),
+    ]
+)
+
+private let journeyWalk5k = Journey(
+    id: UUID(uuidString: "F6A7B8C9-0002-0002-0002-000000000002")!,
+    name: "Berges de la Seine",
+    subtitle: "Notre-Dame → Tour Eiffel — 5 km",
+    totalKm: 5,
+    category: .walk,
+    emoji: "🌊",
+    milestones: [
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0002-0002-0002-000000000021")!,
+            km: 0,
+            label: "Notre-Dame de Paris",
+            description: "Départ face au parvis de la cathédrale, sur l'Île de la Cité. La Seine coule de chaque côté."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0002-0002-0002-000000000022")!,
+            km: 2,
+            label: "Pont des Arts",
+            description: "Le pont piéton aux anciens cadenas d'amour. Vue dégagée sur l'Institut de France et le Louvre."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0002-0002-0002-000000000023")!,
+            km: 5,
+            label: "Tour Eiffel",
+            description: "La dame de fer vue depuis le Champ-de-Mars. Depuis les berges, elle apparaît d'un coup au détour du pont de l'Alma."
+        ),
+    ]
+)
+
+private let journeyWalk10k = Journey(
+    id: UUID(uuidString: "F6A7B8C9-0003-0003-0003-000000000003")!,
+    name: "Boucle de Central Park",
+    subtitle: "Le grand tour du parc new-yorkais — 10 km",
+    totalKm: 10,
+    category: .walk,
+    emoji: "🍂",
+    milestones: [
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0003-0003-0003-000000000031")!,
+            km: 0,
+            label: "Grand Army Plaza",
+            description: "Entrée sud du parc, à deux pas du Plaza Hotel. Les calèches attendent, les gratte-ciel de Midtown encadrent les premiers arbres."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0003-0003-0003-000000000032")!,
+            km: 3,
+            label: "Bethesda Fountain",
+            description: "La fontaine de l'Ange des Eaux, cœur romantique du parc. Les terrasses donnent sur le lac et ses barques."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0003-0003-0003-000000000033")!,
+            km: 6,
+            label: "Harlem Meer",
+            description: "Lac tranquille à l'angle nord-est, loin de l'agitation touristique. Les colverts y hivernent, les New-Yorkais y pêchent."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0003-0003-0003-000000000034")!,
+            km: 10,
+            label: "Strawberry Fields",
+            description: "Mosaïque « Imagine » en hommage à John Lennon, qui habitait le Dakota Building juste en face. Bouclage du tour."
+        ),
+    ]
+)
+
+private let journeyWalk21k = Journey(
+    id: UUID(uuidString: "F6A7B8C9-0004-0004-0004-000000000004")!,
+    name: "Semi-marathon de Paris",
+    subtitle: "Hôtel de Ville → Champs-Élysées — 21 km",
+    totalKm: 21,
+    category: .walk,
+    emoji: "🏃",
+    milestones: [
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0004-0004-0004-000000000041")!,
+            km: 0,
+            label: "Hôtel de Ville",
+            description: "Départ sur le parvis. La Seine est à deux pas, les bâtiments haussmanniens bordent les premiers kilomètres."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0004-0004-0004-000000000042")!,
+            km: 7,
+            label: "Bois de Vincennes",
+            description: "Le poumon vert de l'est parisien. Les allées forestières offrent un répit après les boulevards."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0004-0004-0004-000000000043")!,
+            km: 14,
+            label: "Place de la Nation",
+            description: "La grande place ronde marque le retour vers le centre. Les jambes commencent à parler."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0004-0004-0004-000000000044")!,
+            km: 21,
+            label: "Champs-Élysées",
+            description: "Arrivée sur la plus belle avenue du monde. 21,1 km dans les jambes et tout Paris pour récompense."
+        ),
+    ]
+)
+
+private let journeyWalk42k = Journey(
+    id: UUID(uuidString: "F6A7B8C9-0005-0005-0005-000000000005")!,
+    name: "Marathon de Paris",
+    subtitle: "La boucle mythique — 42 km",
+    totalKm: 42,
+    category: .walk,
+    emoji: "🏅",
+    milestones: [
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0005-0005-0005-000000000051")!,
+            km: 0,
+            label: "Champs-Élysées",
+            description: "Départ au pied de l'Arc de Triomphe. Des dizaines de milliers de coureurs s'élancent chaque année en avril."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0005-0005-0005-000000000052")!,
+            km: 10,
+            label: "Bois de Boulogne",
+            description: "Première grande bouffée d'air vert. Les allées du bois absorbent les premiers kilomètres dans leurs feuillages."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0005-0005-0005-000000000053")!,
+            km: 21,
+            label: "Mi-parcours — Bastille",
+            description: "La moitié est franchie. La place de la Bastille et ses colonnes marquent le point de bascule mental du marathon."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0005-0005-0005-000000000054")!,
+            km: 30,
+            label: "Bois de Vincennes",
+            description: "Le redoutable km 30 — le mur du marathon. Les arbres du bois sont là pour souffler avant le retour."
+        ),
+        Milestone(
+            id: UUID(uuidString: "F6A7B8C9-0005-0005-0005-000000000055")!,
+            km: 42,
+            label: "Avenue Foch",
+            description: "L'arrivée. 42,195 km parcourus à travers Paris. La médaille, les jambes en feu, et la fierté qui ne passe pas."
+        ),
+    ]
+)
 
 // MARK: - Sentiers
 

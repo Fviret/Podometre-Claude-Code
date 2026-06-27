@@ -4,6 +4,7 @@ import Foundation
 
 /// Catégorie thématique d'un trajet.
 enum JourneyCategory: String, Codable, CaseIterable {
+    case walk    = "Promenades"
     case trail   = "Sentiers"
     case history = "Histoire"
     case myth    = "Mythes & Épopées"
