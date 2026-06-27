@@ -23,6 +23,9 @@ class StepCountViewModel: ObservableObject {
         UserDefaults.standard.set(id, forKey: "ringColorId")
     }
 
+    /// Nombre de jours consécutifs où l'objectif quotidien a été atteint, en remontant depuis aujourd'hui.
+    @Published var currentStreak: Int = 0
+
     /// Nombre de jours où chaque seuil de pas a été atteint. Clé = StepMilestoneBadge.id.
     @Published var milestoneCounts: [String: Int] = [:]
 
@@ -39,6 +42,58 @@ class StepCountViewModel: ObservableObject {
     /// Retourne `true` si le trajet identifié par `id` a été entièrement complété.
     func isJourneyCompleted(_ id: String) -> Bool {
         completedJourneyIds.contains(id)
+    }
+
+    /// Calcule la série de jours consécutifs où l'objectif a été atteint, en remontant depuis aujourd'hui.
+    /// Aujourd'hui est inclus uniquement si `stepCount` >= `goal`. Plafond à 365 jours.
+    func computeStreak() {
+        Task {
+            let result = await computeStreakAsync()
+            currentStreak = result
+        }
+    }
+
+    private func computeStreakAsync() async -> Int {
+        #if targetEnvironment(simulator)
+        return stepCount >= goal ? 5 : 4
+        #else
+        guard let stepType = HKQuantityType.quantityType(forIdentifier: .stepCount) else { return 0 }
+        let calendar = Calendar.current
+        var streak = 0
+        var offset = 0
+
+        if stepCount >= goal {
+            streak = 1
+            offset = 1
+        }
+
+        while offset <= 365 {
+            let date = calendar.date(byAdding: .day, value: -offset, to: Date()) ?? Date()
+            let start = calendar.startOfDay(for: date)
+            guard let end = calendar.date(byAdding: .day, value: 1, to: start) else { break }
+            let predicate = HKQuery.predicateForSamples(withStart: start, end: end)
+
+            let steps: Int = await withCheckedContinuation { continuation in
+                let query = HKStatisticsQuery(
+                    quantityType: stepType,
+                    quantitySamplePredicate: predicate,
+                    options: .cumulativeSum
+                ) { _, stats, _ in
+                    continuation.resume(returning: Int(stats?.sumQuantity()?.doubleValue(for: .count()) ?? 0))
+                }
+                healthStore.execute(query)
+            }
+
+            if steps >= goal {
+                streak += 1
+                offset += 1
+            } else {
+                break
+            }
+        }
+
+        return streak
+        #endif
     }
 
     /// Récupère sur toute l'historique HealthKit le nombre de jours où chaque seuil de pas a été atteint.
@@ -92,11 +147,12 @@ class StepCountViewModel: ObservableObject {
     }
 
     /// Nombre de pas pour le jour sélectionné.
-    /// Quand le jour affiché est aujourd'hui, met à jour le dernier slot du graphe hebdomadaire.
+    /// Quand le jour affiché est aujourd'hui, met à jour le dernier slot du graphe hebdomadaire et recalcule la série.
     @Published var stepCount: Int = 0 {
         didSet {
             if selectedDayOffset == 0, currentWeekSteps.count == 7 {
                 currentWeekSteps[6] = stepCount
+                computeStreak()
             }
         }
     }
@@ -176,6 +232,7 @@ class StepCountViewModel: ObservableObject {
                 self?.fetchMonthSteps()
                 self?.fetchWeeklyComparison()
                 self?.fetchMilestoneCounts()
+                self?.computeStreak()
                 self?.startObserving()
             }
         }
@@ -187,6 +244,7 @@ class StepCountViewModel: ObservableObject {
     private func loadMockData() {
         isAuthorized = true
         fetchMilestoneCounts()
+        computeStreak()
 
         // Pas du jour sélectionné
         stepCount = selectedDayOffset == 0 ? 7_430 : [4_200, 11_350, 8_900, 3_100, 12_600, 9_870, 6_540][selectedDayOffset % 7]
