@@ -5,9 +5,7 @@ struct JourneyPickerView: View {
     @EnvironmentObject private var progressService: JourneyProgressService
 
     @State private var selectedJourney: Journey?
-    @State private var journeyPendingConfirmation: Journey?
-    @State private var showAbandonAlert = false
-    /// Trajet dont on affiche la prévisualisation avant démarrage.
+    /// Trajet dont on affiche la prévisualisation (nouveau ou déjà en cours).
     @State private var journeyToPreview: Journey?
 
     /// Ordre d'affichage des catégories.
@@ -37,23 +35,15 @@ struct JourneyPickerView: View {
                     .environmentObject(progressService)
             }
             .sheet(item: $journeyToPreview) { journey in
-                JourneyPreviewSheet(journey: journey) {
+                JourneyPreviewSheet(
+                    journey: journey,
+                    requiresAbandon: progressService.hasActiveJourney(otherThan: journey)
+                ) {
                     progressService.startJourney(journey)
                     selectedJourney = journey
+                } onContinue: {
+                    selectedJourney = journey
                 }
-            }
-            .alert("Abandonner le trajet en cours ?", isPresented: $showAbandonAlert) {
-                Button("Abandonner", role: .destructive) {
-                    if let journey = journeyPendingConfirmation {
-                        journeyToPreview = journey
-                    }
-                    journeyPendingConfirmation = nil
-                }
-                Button("Annuler", role: .cancel) {
-                    journeyPendingConfirmation = nil
-                }
-            } message: {
-                Text("Ta progression actuelle sera perdue.")
             }
         }
     }
@@ -72,27 +62,9 @@ struct JourneyPickerView: View {
                 JourneyCard(
                     journey: journey,
                     progress: progressService.progress(for: journey),
-                    onAction: { handleAction(for: journey) }
+                    onAction: { journeyToPreview = journey }
                 )
             }
-        }
-    }
-
-    // MARK: - Navigation
-
-    /// Décide d'ouvrir la prévisualisation, de reprendre ou de demander confirmation d'abandon.
-    private func handleAction(for journey: Journey) {
-        let hasProgress = progressService.progress(for: journey) != nil
-        if hasProgress {
-            // Trajet déjà commencé → navigation directe vers le détail
-            selectedJourney = journey
-        } else if progressService.hasActiveJourney(otherThan: journey) {
-            // Un autre trajet est en cours → confirmation avant prévisualisation
-            journeyPendingConfirmation = journey
-            showAbandonAlert = true
-        } else {
-            // Nouveau trajet → prévisualisation des étapes avant démarrage
-            journeyToPreview = journey
         }
     }
 }
@@ -171,9 +143,9 @@ private struct JourneyCard: View {
 
             Button(action: onAction) {
                 HStack {
-                    Image(systemName: hasProgress ? "figure.walk" : "play.fill")
+                    Image(systemName: "eye")
                         .font(.caption)
-                    Text(hasProgress ? "Continuer" : "Commencer")
+                    Text("Voir le trajet")
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                 }
                 .frame(maxWidth: .infinity)

@@ -1,12 +1,21 @@
 import SwiftUI
 
-/// Sheet de prévisualisation d'un trajet avant de le démarrer.
-/// Affiche les étapes dans l'ordre et propose un bouton de démarrage en bas.
+/// Sheet de prévisualisation d'un trajet.
+/// Affiche les étapes dans l'ordre et propose les actions de démarrage ou de reprise en bas.
 struct JourneyPreviewSheet: View {
     let journey: Journey
+    /// Si `true`, un autre trajet est en cours — "Commencer" affichera une confirmation d'abandon.
+    let requiresAbandon: Bool
+    /// Appelé après confirmation quand l'utilisateur démarre ce trajet pour la première fois.
     let onStart: () -> Void
+    /// Appelé quand l'utilisateur reprend un trajet déjà en cours.
+    let onContinue: () -> Void
 
     @Environment(\.dismiss) private var dismiss
+    @State private var showAbandonAlert = false
+
+    /// `true` si le trajet a déjà une progression (determiné via le contexte du picker).
+    private var hasProgress: Bool { !requiresAbandon && onContinue != nil }
 
     var body: some View {
         NavigationStack {
@@ -26,7 +35,16 @@ struct JourneyPreviewSheet: View {
                 }
             }
             .overlay(alignment: .bottom) {
-                startButton
+                bottomActions
+            }
+            .alert("Abandonner le trajet en cours ?", isPresented: $showAbandonAlert) {
+                Button("Abandonner", role: .destructive) {
+                    dismiss()
+                    onStart()
+                }
+                Button("Annuler", role: .cancel) {}
+            } message: {
+                Text("Ta progression actuelle sera perdue.")
             }
         }
     }
@@ -96,9 +114,9 @@ struct JourneyPreviewSheet: View {
         }
     }
 
-    // MARK: - Bouton de démarrage
+    // MARK: - Actions en bas
 
-    private var startButton: some View {
+    private var bottomActions: some View {
         VStack(spacing: 0) {
             LinearGradient(
                 colors: [Color(.systemBackground).opacity(0), Color(.systemBackground)],
@@ -107,21 +125,46 @@ struct JourneyPreviewSheet: View {
             )
             .frame(height: 24)
 
-            Button {
-                dismiss()
-                onStart()
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "play.fill")
-                        .font(.subheadline)
-                    Text("Commencer le trajet")
-                        .font(.system(size: 17, weight: .semibold, design: .rounded))
+            VStack(spacing: 10) {
+                // Bouton principal : Commencer (avec gestion abandon) ou Continuer
+                Button {
+                    if requiresAbandon {
+                        showAbandonAlert = true
+                    } else {
+                        dismiss()
+                        onStart()
+                    }
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "play.fill")
+                            .font(.subheadline)
+                        Text("Commencer le trajet")
+                            .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(Color.accentColor)
+                    .foregroundStyle(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(Color.accentColor)
-                .foregroundStyle(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+
+                // Bouton secondaire : Continuer si trajet déjà en cours
+                Button {
+                    dismiss()
+                    onContinue()
+                } label: {
+                    HStack(spacing: 8) {
+                        Image(systemName: "figure.walk")
+                            .font(.subheadline)
+                        Text("Continuer le trajet")
+                            .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .background(Color.secondary.opacity(0.1))
+                    .foregroundStyle(Color.primary)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                }
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 32)
@@ -132,7 +175,7 @@ struct JourneyPreviewSheet: View {
 
 // MARK: - MilestonePreviewRow
 
-/// Ligne de la timeline de prévisualisation (toutes les étapes sont affichées comme à venir).
+/// Ligne de la timeline de prévisualisation.
 private struct MilestonePreviewRow: View {
     let milestone: Milestone
     let index: Int
@@ -141,7 +184,6 @@ private struct MilestonePreviewRow: View {
     var body: some View {
         HStack(alignment: .top, spacing: 14) {
 
-            // Indicateur + trait vertical
             VStack(spacing: 0) {
                 ZStack {
                     Circle()
@@ -163,7 +205,6 @@ private struct MilestonePreviewRow: View {
             }
             .frame(width: 28)
 
-            // Contenu
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline) {
                     Text(milestone.label)
@@ -190,14 +231,29 @@ private struct MilestonePreviewRow: View {
 
 // MARK: - Preview
 
-#Preview("GR20") {
-    JourneyPreviewSheet(journey: allJourneys[0]) {
-        print("Démarré !")
-    }
+#Preview("Nouveau trajet") {
+    JourneyPreviewSheet(
+        journey: allJourneys[0],
+        requiresAbandon: false,
+        onStart: {},
+        onContinue: {}
+    )
 }
 
-#Preview("Alexandre complet") {
-    JourneyPreviewSheet(journey: allJourneys[7]) {
-        print("Démarré !")
-    }
+#Preview("Trajet en cours") {
+    JourneyPreviewSheet(
+        journey: allJourneys[0],
+        requiresAbandon: false,
+        onStart: {},
+        onContinue: {}
+    )
+}
+
+#Preview("Abandon requis") {
+    JourneyPreviewSheet(
+        journey: allJourneys[1],
+        requiresAbandon: true,
+        onStart: {},
+        onContinue: {}
+    )
 }
