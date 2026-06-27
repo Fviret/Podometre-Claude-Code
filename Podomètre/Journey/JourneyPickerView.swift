@@ -143,15 +143,13 @@ private struct JourneyCard: View {
 
             Button(action: onAction) {
                 HStack {
-                    Image(systemName: "eye")
-                        .font(.caption)
-                    Text("Voir le trajet")
+                    Text(hasProgress ? "Voir mes étapes" : "Voir le trajet")
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 10)
                 .background(hasProgress ? Color.accentColor : Color.accentColor.opacity(0.12))
-                .foregroundStyle(hasProgress ? Color.white : Color.accentColor)
+                //.foregroundStyle(hasProgress ? Color.white : Color.accentColor)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             }
             .buttonStyle(.plain)
