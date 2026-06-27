@@ -65,6 +65,12 @@ struct SettingsView: View {
                     }
                     .padding(.vertical, 4)
                 }
+                if viewModel.currentStreak > 0 {
+                    Section {
+                        StreakBannerView(streak: viewModel.currentStreak, viewModel: viewModel)
+                    }
+                }
+
                 Section {
                     BadgeGridView(viewModel: viewModel)
                 } header: {
