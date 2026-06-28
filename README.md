@@ -178,11 +178,15 @@ Deux types de badges :
 
 ## Accessibilité
 
-L'app est conçue pour être utilisable avec les technologies d'assistance iOS :
+Un audit statique a été réalisé sur l'ensemble des vues Swift (8 fichiers) : revue du code, vérification des attributs dans Xcode Accessibility Inspector sur simulateur. **Aucun test VoiceOver bout-en-bout sur device physique n'a encore été réalisé** — c'est l'étape suivante avant de considérer l'accessibilité comme validée.
 
-- **VoiceOver** — tous les éléments custom ont un `accessibilityLabel` et `accessibilityValue` explicites. Les ZStack composites (anneau, cellules calendrier, jalons, badges, météo) sont regroupés en un seul élément sémantique. Le graphe hebdomadaire est lu comme un résumé textuel complet.
-- **Dynamic Type** — toutes les tailles de police utilisent des styles système (`headline`, `subheadline`, `callout`, `caption`, etc.) pour s'adapter aux préférences de taille de texte de l'utilisateur.
-- **Reduce Motion** — toutes les animations sont conditionnées par `@Environment(\.accessibilityReduceMotion)` et désactivées si l'utilisateur a activé "Réduire les animations" dans les réglages système.
+Ce qui a été appliqué :
+
+- **VoiceOver** — tous les éléments custom ont un `accessibilityLabel` et `accessibilityValue` explicites. Les ZStack composites (anneau, cellules calendrier, jalons, badges, météo) sont regroupés en un seul élément sémantique. Le graphe hebdomadaire est lu comme un résumé textuel complet. Les icônes décoratives sont masquées avec `.accessibilityHidden(true)`.
+- **Dynamic Type** — toutes les tailles de police fixes remplacées par des styles système (`headline`, `subheadline`, `callout`, `caption`, etc.) pour s'adapter aux préférences de taille de texte.
+- **Reduce Motion** — toutes les animations conditionnées par `@Environment(\.accessibilityReduceMotion)` et désactivées si l'utilisateur a activé "Réduire les animations" dans les réglages iOS.
+
+> Pour tester VoiceOver : Réglages → Accessibilité → VoiceOver, ou triple-clic sur le bouton latéral si le raccourci est configuré.
 
 ---
 
