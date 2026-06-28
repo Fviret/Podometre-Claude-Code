@@ -156,7 +156,7 @@ journeyProgressService.onJourneyCompleted = { id in
 
 ## Workflow Git
 
-Chaque feature est développée sur sa propre branche et mergée directement dans `main` sans PR.
+Chaque feature est développée sur sa propre branche. **Toujours créer une branche dédiée avant de commencer — ne jamais travailler directement sur `main`.** Chaque PR correspond à une branche.
 
 ### Conventions de nommage des branches
 
