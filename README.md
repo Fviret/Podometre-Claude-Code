@@ -56,15 +56,13 @@ Courbe des 7 derniers jours (semaine en cours en couleur, semaine précédente e
 📷
 
 **Bannière météo**
-Affichée entre l'anneau et le calendrier. Consulte l'API Open-Meteo (gratuite, sans clé) en fonction de la position GPS et indique les conditions de marche pour les 6 prochaines heures.
+Affichée en haut de l'écran si la localisation est autorisée. Consulte l'API Open-Meteo (gratuite, sans clé) et s'affiche uniquement en cas de pluie imminente.
 
-Quatre états possibles :
-- ☀️ *"Conditions idéales pour marcher"* — aucune pluie prévue
-- 🌦️ *"Sec encore Nh — profitez-en"* — pluie dans plus d'une heure
-- 🌧️ *"Pluie imminente — partez maintenant !"* — pluie dans moins d'une heure
-- 🌧️ *"Pluie en cours — attendez une accalmie"* — précipitations actuelles
+- Invisible si la localisation est refusée ou aucune pluie attendue
+- *"Pluie en cours"* — précipitations actuelles détectées
+- *"Pluie dans moins d'1h"* — pluie prévue dans l'heure suivante
 
-La bannière affiche également la température actuelle et se rafraîchit toutes les 30 minutes. Elle est masquée silencieusement si la localisation est refusée ou en cas d'erreur réseau.
+Se rafraîchit toutes les 30 minutes. Masquée silencieusement en cas d'erreur réseau.
 
 📷
 
