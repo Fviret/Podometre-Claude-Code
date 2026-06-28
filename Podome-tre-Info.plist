@@ -8,6 +8,7 @@
 	<string>Reçois une alerte quand tu débloques une nouvelle étape sur ton trajet.</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>fetch</string>
 		<string>processing</string>
 	</array>
 </dict>

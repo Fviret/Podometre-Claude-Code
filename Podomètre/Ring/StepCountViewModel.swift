@@ -509,8 +509,8 @@ class StepCountViewModel: ObservableObject {
                 self?.stepCount = steps
                 self?.checkAndNotifyGoalReached()
                 self?.computeStreak()
+                completion()
             }
-            completion()
         }
         healthStore.execute(query)
     }
