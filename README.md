@@ -1,7 +1,6 @@
 # Podomètre
 
-Application iOS de suivi de pas quotidiens, développée en Swift/SwiftUI pur, sans dépendances tierces.
-
+App personnelle, gratuite, sans publicité. Conçue pour les marcheurs qui veulent donner un sens narratif à leurs pas quotidiens.
 
 ---
 
