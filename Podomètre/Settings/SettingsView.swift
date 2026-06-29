@@ -99,14 +99,7 @@ struct SettingsView: View {
             }
             .navigationTitle("Paramètres")
 
-            #if DEBUG
-            Section {
-                Button("Réinitialiser onboarding") {
-                    UserDefaults.standard.removeObject(forKey: "hasCompletedOnboarding")
-                }
-                .foregroundStyle(.red)
-            }
-            #endif
+
         }
     }
 }
