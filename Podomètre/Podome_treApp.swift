@@ -15,7 +15,7 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
 @main
 struct Podome_treApp: App {
     private let notificationDelegate = NotificationDelegate()
-    @StateObject private var onboardingViewModel = StepCountViewModel()
+    @StateObject private var viewModel = StepCountViewModel()
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
 
     init() {
@@ -24,9 +24,9 @@ struct Podome_treApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: viewModel)
                 .fullScreenCover(isPresented: .constant(!hasCompletedOnboarding)) {
-                    OnboardingView(viewModel: onboardingViewModel)
+                    OnboardingView(viewModel: viewModel)
                 }
         }
     }
