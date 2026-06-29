@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var viewModel = StepCountViewModel()
+    @ObservedObject var viewModel: StepCountViewModel
     @StateObject private var journeyProgressService = JourneyProgressService()
     @AppStorage("isDarkMode") private var isDarkMode: Bool = false
     @AppStorage("journeyNotificationsEnabled") private var journeyNotificationsEnabled: Bool = true
@@ -46,5 +46,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: StepCountViewModel())
 }
