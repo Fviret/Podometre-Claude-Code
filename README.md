@@ -1,6 +1,6 @@
 # Podomètre
 
-Pédomètre transforme vos pas quotidiens en voyage. Chaque kilomètre parcouru vous rapproche d'une destination réelle — le GR20, Compostelle, la Route de la Soie ou l'Odyssée d'Ulysse.
+Podomètre transforme vos pas quotidiens en voyage. Chaque kilomètre parcouru vous rapproche d'une destination réelle — le GR20, Compostelle, la Route de la Soie ou l'Odyssée d'Ulysse.
 
 ---
 
