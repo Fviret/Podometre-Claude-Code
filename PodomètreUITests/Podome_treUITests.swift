@@ -61,9 +61,9 @@ final class OnboardingUITests: XCTestCase {
         XCTAssertEqual(nextButton.label, "Suivant")
     }
 
-    /// Navigue jusqu'à la slide 3 et vérifie le bouton HealthKit.
+    /// Navigue jusqu'à la slide 3 et vérifie le bouton "Suivant".
     @MainActor
-    func testOnboardingSlide3ShowsHealthKitButton() throws {
+    func testOnboardingSlide3ShowsNextButton() throws {
         let app = XCUIApplication()
         app.launchFresh()
 
@@ -73,10 +73,10 @@ final class OnboardingUITests: XCTestCase {
         nextButton.tap()
 
         XCTAssertTrue(app.buttons["onboarding_primary_button"].waitForExistence(timeout: 3))
-        XCTAssertEqual(app.buttons["onboarding_primary_button"].label, "Autoriser l'accès")
+        XCTAssertEqual(app.buttons["onboarding_primary_button"].label, "Suivant")
     }
 
-    /// Navigue jusqu'à la slide 4 via "Plus tard" et vérifie le bouton final.
+    /// Navigue jusqu'à la slide 4 et vérifie le bouton "Lancer l'app".
     @MainActor
     func testOnboardingSlide4ShowsLaunchButton() throws {
         let app = XCUIApplication()
@@ -86,10 +86,7 @@ final class OnboardingUITests: XCTestCase {
         XCTAssertTrue(nextButton.waitForExistence(timeout: 5))
         nextButton.tap()
         nextButton.tap()
-
-        let skipButton = app.buttons["Plus tard"]
-        XCTAssertTrue(skipButton.waitForExistence(timeout: 3))
-        skipButton.tap()
+        nextButton.tap()
 
         let launchButton = app.buttons["onboarding_primary_button"]
         XCTAssertTrue(launchButton.waitForExistence(timeout: 3))
@@ -106,10 +103,7 @@ final class OnboardingUITests: XCTestCase {
         XCTAssertTrue(nextButton.waitForExistence(timeout: 5))
         nextButton.tap()
         nextButton.tap()
-
-        let skipButton = app.buttons["Plus tard"]
-        XCTAssertTrue(skipButton.waitForExistence(timeout: 3))
-        skipButton.tap()
+        nextButton.tap()
 
         let launchButton = app.buttons["onboarding_primary_button"]
         XCTAssertTrue(launchButton.waitForExistence(timeout: 3))
@@ -242,14 +236,16 @@ final class ActivityUITests: XCTestCase {
         XCTAssertEqual(dateLabel.label, "Hier")
     }
 
-    /// Le chevron droit est désactivé quand on est sur "Aujourd'hui".
+    /// Le chevron droit n'est pas interactif quand on est sur "Aujourd'hui"
+    /// (il est masqué via opacity 0 et désactivé — non présent dans l'arbre XCUITest).
     @MainActor
-    func testRightChevronIsDisabledOnToday() throws {
+    func testRightChevronIsHiddenOnToday() throws {
         let app = XCUIApplication()
         app.launchWithOnboardingDone()
 
         XCTAssertTrue(app.otherElements["step_ring"].waitForExistence(timeout: 5))
-        XCTAssertFalse(app.buttons["Jour suivant"].isEnabled)
+        // Le bouton est opacity(0) + disabled — absent de l'arbre d'accessibilité
+        XCTAssertFalse(app.buttons["chevron_right"].exists)
     }
 
     /// Le chevron droit se réactive après avoir navigué vers un jour passé.
@@ -261,6 +257,8 @@ final class ActivityUITests: XCTestCase {
         XCTAssertTrue(app.otherElements["step_ring"].waitForExistence(timeout: 5))
         app.buttons["Jour précédent"].tap()
 
-        XCTAssertTrue(app.buttons["Jour suivant"].isEnabled)
+        let chevronRight = app.buttons["chevron_right"]
+        XCTAssertTrue(chevronRight.waitForExistence(timeout: 3))
+        XCTAssertTrue(chevronRight.isEnabled)
     }
 }

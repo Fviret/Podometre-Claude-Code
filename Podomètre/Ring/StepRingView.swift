@@ -104,6 +104,7 @@ struct StepRingView: View {
                             }
                             .buttonStyle(.plain)
                             .accessibilityLabel("Jour suivant")
+                            .accessibilityIdentifier("chevron_right")
                             .opacity(viewModel.selectedDayOffset > 0 ? 1 : 0)
                             .disabled(viewModel.selectedDayOffset <= 0)
                             .animation(reduceMotion ? nil : .easeInOut(duration: 0.15), value: viewModel.selectedDayOffset)
